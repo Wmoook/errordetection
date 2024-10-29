@@ -2,6 +2,10 @@ import { Exercise } from './exercise';
 import ExerciseData from '../interfaces/exerciseData';
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import logo from '../logo.svg';
+import musicnote from '../musicnote.png';
+import othernote from '../othernote.png';
 
 export function ExercisesPage({
     allExData,
@@ -34,6 +38,9 @@ export function ExercisesPage({
     const [upd, setUpd] = useState<boolean>(false);
     const [selExercise, setSelExercise] = useState<ExerciseData |  undefined>(undefined);
     const [exList, setExList] = useState<(ExerciseData | undefined)[]>([]);
+
+    // Make sure "Rhythm" is included in the checkbox options
+    const tagOptions = ["Pitch", "Intonation", "Rhythm"];
 
     const sortExercises = function (input: string | string[] | number | boolean, inputType:string) {
         var tempTags = tags, tempDiff = diff, tempVoices = voices, tempTypes = types, tempMeter = meter, tempTranspos = transpos;
@@ -268,14 +275,18 @@ export function ExercisesPage({
                             <input type="checkbox" name="tags" value="Pitch" checked={tags.includes("Pitch")} onChange={tagsChange} style={{ marginRight: "4px" }} />
                             Pitch
                         </label>
-                        <label style={{ display: "flex", alignItems: "center", marginLeft: "-5px"}}>
+                        <label style={{ display: "flex", alignItems: "center", marginRight: "12px" }}>
                             <input type="checkbox" name="tags" value="Intonation" checked={tags.includes("Intonation")} onChange={tagsChange} style={{ marginRight: "4px" }} />
                             Intonation
                         </label>
+                        <label style={{ display: "flex", alignItems: "center" }}>
+                            <input type="checkbox" name="tags" value="Rhythm" checked={tags.includes("Rhythm")} onChange={tagsChange} style={{ marginRight: "4px" }} />
+                            Rhythm
+                        </label>
                     </form>
-                    <form id="transpos" style={{ display: "flex", alignItems: "center", marginLeft: "-20px" }}>
-                        <input type="checkbox" name="transpos" value="buh" checked={transpos} onChange={transposChange} style={{ marginRight: "4px" }} />
-                        <div style={{ fontSize: "16px", whiteSpace: "nowrap" }}>Transposing Instruments</div>
+                    <form id="transpos" style={{ display: "flex", alignItems: "center" }}>
+                        <input type="checkbox" name="transpos" value="buh" checked={transpos} onChange={transposChange} style={{ marginRight: "8px" }} />
+                        <div style={{ fontSize: "16px" }}>Transposing Instruments</div>
                     </form>
                 </div>
 
@@ -328,8 +339,7 @@ export function ExercisesPage({
                                 <option value="None">None</option>
                                 <option value="Drone">Drone</option>
                                 <option value="Ensemble Parts">Ensemble Parts</option>
-                                <option value="Both">Drone & Ensemble Parts</option>
-                            </select>
+                                <option value="Both">Drone & Ensemble Parts</option>                            </select>
                         </form>
 
                         <Button variant="danger" onClick={resetSort} style={{marginLeft: "8px"}}>Reset Sort</Button>
@@ -383,4 +393,32 @@ export function ExercisesPage({
         </div>
 
     );
+}
+
+export function HomePage() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1>Error Detectinator</h1>
+        <p>
+          Choose a category to practice:
+        </p>
+        <div className="button-container">
+          <Link to="/exercises?tags=Pitch" className="category-button">
+            <img src={musicnote} alt="Pitch" />
+            <span>Pitch</span>
+          </Link>
+          <Link to="/exercises?tags=Intonation" className="category-button">
+            <img src={othernote} alt="Intonation" />
+            <span>Intonation</span>
+          </Link>
+          <Link to="/exercises?tags=Rhythm" className="category-button">
+            <img src={othernote} alt="Rhythm" /> {/* Consider using a different image for Rhythm */}
+            <span>Rhythm</span>
+          </Link>
+        </div>
+      </header>
+    </div>
+  );
 }

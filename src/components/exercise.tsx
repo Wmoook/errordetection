@@ -134,7 +134,7 @@ export function Exercise({
         var retval = 0;
         var selTim = Number(note.abselem.elemset[0].getAttribute("selectedTimes"));
         if (clicked) selTim++;
-        if (selTim >= 3) {
+        if (selTim >= (ExData.types === "Rhythm" ? 4 : 3)) {
             selTim = 0;
             selNotes.splice(selNotes.indexOf(note),1);
             selAnswers.splice(selAnswers.indexOf(note),1)
@@ -143,22 +143,23 @@ export function Exercise({
         if (klass === undefined)
             klass = "abcjs-note_selected";
         if (selTim <= 0) {
-            color = "#000000";
+            color = "#000000"; // Black (unselected)
         }
         if (selTim === 1) {
-            color = "#ff6100"; //was red - ff0000, now orange - ff6100
+            color = "#ff6100"; // Orange (pitch error)
         }
-        /* if (selTim == 2) {
-            color = "#dc267f"; //was blue - 00ff00, now magenta - dc267f
-        } */
         if (selTim === 2) {
-            color = "#648fff"; //was green - 0000ff, now blue - 648fff
+            color = "#648fff"; // Blue (intonation error)
+        }
+        if (selTim === 3 && ExData.types === "Rhythm") {
+            color = "#9900cc"; // Purple (rhythm error)
+        } else if (selTim === 3) {
+            color = "#000000"; // Reset to black if not a rhythm exercise
+            selTim = 0;
         }
         if (clicked) note.abselem.elemset[0].setAttribute("selectedTimes", selTim);
         setClass(note.abselem.elemset, klass, "", color);
-        //console.log(note);
         return retval;
-        
     };
 
     // handles notes when they are clicked on: selects them and highlights them
